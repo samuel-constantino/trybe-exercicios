@@ -3,13 +3,6 @@ Realize o download deste arquivo e salve-o como simpsons.json . Utilize o arquiv
 
 Você pode utilizar then e catch , async/await ou uma mistura dos dois para escrever seu código. Procure não utilizar callbacks.
 
-
-
-
-
-
-Crie uma função que adicione ao arquivo simpsonFamily.json o personagem Nelson Muntz .
-Crie uma função que substitua o personagem Nelson Muntz pela personagem Maggie Simpson no arquivo simpsonFamily.json .
 */
 
 const fs = require('fs/promises');
@@ -80,6 +73,42 @@ const getSimpsonFamily = async (ids) => {
     }
 };
 
+// Crie uma função que adicione ao arquivo simpsonFamily.json o personagem Nelson Muntz.
+const addCharacter = async (characterName) => {
+    const characters = await getCharacters();
+    
+    characters.push({
+        id: characters.length + 1,
+        name: characterName
+    });
+
+    try{
+        await fs.writeFile('./simpsonFamily.json', JSON.stringify(characters));
+        console.log('Arquivo simpsonFamily.json atualizado com sucesso');
+    }catch(err){
+        console.log(err.message);
+    }
+};
+
+// Crie uma função que substitua o personagem Nelson Muntz pela personagem Maggie Simpson no arquivo simpsonFamily.json.
+const replaceCharacter = async (characterName) => {
+    const characters = await getCharacters();
+
+    const newCharacters = characters.map((char) => {
+        if(char.name === "Nelson Muntz"){
+            char.name = characterName;
+        }
+        return char;
+    });
+
+    try{
+        await fs.writeFile('./simpsonFamily.json', JSON.stringify(newCharacters));
+        console.log('Arquivo simpsonFamily.json atualizado com sucesso');
+    }catch(err){
+        console.log(err.message);
+    }
+};
+
 const main = async () => {
     // showCharacters();
 
@@ -89,6 +118,10 @@ const main = async () => {
     // removeCharacters(["10", "6"]);
 
     // getSimpsonFamily(["1","2","3","4"]);
+
+    // addCharacter("Nelson Muntz");
+
+    // replaceCharacter("Maggie Simpson");
 };
 
 main();
