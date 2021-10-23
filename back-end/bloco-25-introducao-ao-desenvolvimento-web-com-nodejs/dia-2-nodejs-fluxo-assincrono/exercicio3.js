@@ -1,3 +1,8 @@
+/*
+Reescreva o código do exercício anterior para que utilize async/await .
+Lembre-se: a palavra chave await só pode ser utilizada dentro de funções async
+*/
+
 const calc = require('./exercicio1.js');
 
 const getRandomNumber = () => {
