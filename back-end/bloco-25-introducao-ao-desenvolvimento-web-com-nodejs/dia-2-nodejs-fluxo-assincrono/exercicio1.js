@@ -9,8 +9,8 @@ const calc = (a, b, c) => {
       reject("Valor muito baixo");
     }
 
-    resolve();
+    resolve(result);
   });
 };
 
-calc("a", "b", 3);
+module.exports = calc;
