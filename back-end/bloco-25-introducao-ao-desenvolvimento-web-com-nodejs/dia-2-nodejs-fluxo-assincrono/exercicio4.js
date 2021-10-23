@@ -8,6 +8,7 @@ Crie uma função que leia todos os dados do arquivo e imprima cada personagem n
 Crie uma função que receba o id de uma personagem como parâmetro e retorne uma Promise que é resolvida com os dados da personagem que possui o id informado. Caso não haja uma personagem com o id informado, rejeite a Promise com o motivo "id não encontrado".
 
 Crie uma função que altere o arquivo simpsons.json retirando os personagens com id 10 e 6.
+
 Crie uma função que leia o arquivo simpsons.json e crie um novo arquivo, chamado simpsonFamily.json , contendo as personagens com id de 1 a 4.
 Crie uma função que adicione ao arquivo simpsonFamily.json o personagem Nelson Muntz .
 Crie uma função que substitua o personagem Nelson Muntz pela personagem Maggie Simpson no arquivo simpsonFamily.json .
@@ -27,7 +28,6 @@ const getCharacters = async () => {
     }
 };
 
-
 const showCharacters = async () => {
     const characters = await getCharacters();
 
@@ -36,22 +36,43 @@ const showCharacters = async () => {
     });
 };
 
-// Crie uma função que receba o id de uma personagem como parâmetro e retorne uma Promise que é resolvida com os dados da personagem que possui o id informado. Caso não haja uma personagem com o id informado, rejeite a Promise com o motivo "id não encontrado".
-
 const getSimpsonById = async (id) => {
+    const characters = await getCharacters();
+
+    const character = characters.find((char) => char.id == id);
+    
     try{
-        const data = await fs.readFile('./simpsons.json', 'utf8');
-
-        const personagens = JSON.parse(data);
-
-        const personagem = personagens.find(({id: idSimpson}) => idSimpson == id);
-        console.log(personagem);
+        if(character){
+            console.log(character);
+        }else{
+            throw new Error('id não encontrado');
+        }
     }catch(err){
-        console.log(err);
+        console.log(err.message);
+    }
+};
+
+// Crie uma função que altere o arquivo simpsons.json retirando os personagens com id 10 e 6.
+const removeCharacters = async (ids) => {
+    const characters = await getCharacters();
+
+    const newCharacters = characters.filter((char) => !ids.includes(char.id));
+
+    try{
+        await fs.writeFile('./simpsons.json', JSON.stringify(newCharacters));
+        console.log('Arquivo simpsons.json atualizado com sucesso');
+    }catch(err){
+        console.log(err.message);
     }
 };
 
 const main = async () => {
+    // showCharacters();
+
+    // getSimpsonById(10);
+    // getSimpsonById(120);
+
+    // removeCharacters(["10", "6"]);
     showCharacters();
 };
 
