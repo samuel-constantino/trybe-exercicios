@@ -9,6 +9,4 @@ const escreveArquivo = async (fileName, data) => {
     }
 };
 
-escreveArquivo(2, "teste");
-
 module.exports = escreveArquivo;
