@@ -16,6 +16,11 @@ describe("Testa a execução da função escreveArquivo", () => {
             fs.writeFile.restore();
         });
 
+        it("Verifica se é string", async () => {
+            const result = await escreveArquivo('teste');
+            expect(result).to.be.a('string');
+        })
+
         it("Deve retornar a 'string' 'ok'", async () => {
             const result = await escreveArquivo('arquivo.txt', 'teste');
 
