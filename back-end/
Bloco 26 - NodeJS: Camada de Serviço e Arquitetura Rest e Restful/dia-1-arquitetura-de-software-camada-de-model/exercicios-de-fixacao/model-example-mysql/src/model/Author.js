@@ -1,3 +1,4 @@
+const { authorRouter } = require('../routes');
 const connection = require('./connection');
 
 // Cria uma string com o nome completo do autor
@@ -37,6 +38,27 @@ const getAll = async() => {
 
 };
 
+// Busca pelo id
+const getById = async(authorId) => {
+    const query = 'SELECT id, first_name, middle_name, last_name FROM model_example.authors WHERE id = ?'
+
+    const [ authorData ] = await connection.execute(query, [authorId]);
+    
+    if (!authorData.length) return null;
+
+    const { firstName, middleName, lastName } = serialize(authorData[0]);
+
+    const author = {
+        id: authorId,
+        firstName,
+        middleName,
+        lastName
+    }
+
+    return author;
+}
+
 module.exports = {
     getAll,
+    getById
 };
