@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/', rescue(async (req, res, _next) => {
     const { author_id } = req.query;
     let books;
+    
     if (!author_id || author_id === '') {
         books = await Book.getAll();
     } else {

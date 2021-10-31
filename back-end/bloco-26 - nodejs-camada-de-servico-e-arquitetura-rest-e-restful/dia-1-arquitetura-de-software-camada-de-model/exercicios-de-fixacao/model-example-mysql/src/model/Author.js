@@ -1,26 +1,24 @@
-const { authorRouter } = require('../routes');
 const connection = require('./connection');
 
-// Cria uma string com o nome completo do autor
-const getNewAuthor = (authorData) => {
-    const { id, firstName, middleName, lastName } = authorData;
+// adiciona uma string com o nome completo do autor
+const setFullName = (author) => {
+    const { id, firstName, middleName, lastName } = author;
 
+    // filtra nomes diferentes de null e junta todos, separando por espaço.
     const fullName = [firstName, middleName, lastName]
         .filter((name) => name)
         .join(' ');
 
-    const newAuthor = {
+    return {
         id,
         firstName,
         middleName,
         lastName,
         fullName,
-    }
-
-    return newAuthor;
+    };
 }
 
-// Converte o nome dos campos de snake_case para camelCase
+// Serializa os nomes, convertendo as chaves das propriedades de snake_case para camelCase
 const serialize = ({ id, first_name, middle_name, last_name }) => ({
     id,
     firstName: first_name,
@@ -29,31 +27,30 @@ const serialize = ({ id, first_name, middle_name, last_name }) => ({
 });
 
 // Busca todos os autores do banco.
-const getAll = async() => {
-    const [ authors ] = await connection.execute(
-        'SELECT id, first_name, middle_name, last_name FROM model_example.authors',
-    );
+const getAll = async () => {
+    const query = 'SELECT id, first_name, middle_name, last_name FROM model_example.authors';
 
-    return authors.map(serialize).map(getNewAuthor);
+    const [ authors ] = await connection.execute(query);
 
+    return authors.map(serialize).map(setFullName);
 };
 
 // Busca pelo id
-const getById = async(authorId) => {
+const getById = async (id) => {
     const query = 'SELECT id, first_name, middle_name, last_name FROM model_example.authors WHERE id = ?'
 
-    const [ authorData ] = await connection.execute(query, [authorId]);
+    const [ authors ] = await connection.execute(query, [id]);
     
-    if (!authorData.length) return null;
+    if (!authors.length) return null;
 
-    const { firstName, middleName, lastName } = serialize(authorData[0]);
+    const { firstName, middleName, lastName } = serialize(authors[0]);
 
-    const author = {
-        id: authorId,
+    const author = setFullName({
+        id,
         firstName,
         middleName,
         lastName
-    }
+    });
 
     return author;
 }

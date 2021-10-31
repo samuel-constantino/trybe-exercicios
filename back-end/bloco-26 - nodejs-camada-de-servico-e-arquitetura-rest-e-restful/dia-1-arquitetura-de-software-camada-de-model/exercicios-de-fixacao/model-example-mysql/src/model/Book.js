@@ -22,11 +22,11 @@ const getAllByAuthorId = async (id) => {
 const getById = async (id) => {
     const query = 'SELECT title, author_id FROM model_example.books WHERE id = ?';
     
-    const booksData = await connection.execute(query, [id]);
+    const [ booksData ] = await connection.execute(query, [id]);
     
-    if (!booksData[0].length) return null;
+    if (!booksData.length) return null;
 
-    const { title, author_id } = booksData[0][0];
+    const { title, author_id } = booksData[0];
     
     const book = {
         title,
