@@ -1,15 +1,26 @@
 const connection = require('./connection');
 
+const { ObjectId } = require('mongodb');
+
 const getAll = async() => {
+    /*
+    // BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'SELECT title, author_id FROM model_example.books';
     
     const [ books ] = await connection.execute(query);
 
     return books;
+    */
+
+    return connection()
+        .then((db) => db.collection('books').find().toArray())
+
 };
 
 // Retornar apenas livros associados com um determinado author_id .
 const getAllByAuthorId = async (id) => {
+    /*
+    // BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'SELECT title, author_id FROM model_example.books WHERE author_id = ?';
 
     const [ booksAuthor ] = await connection.execute(query, [id]);
@@ -17,9 +28,15 @@ const getAllByAuthorId = async (id) => {
     if (!booksAuthor.length) return null;
     
     return booksAuthor;
+    */
+
+    return connection()
+        .then((db) => db.collection('books').find({author_id: +id}).toArray())
 };
 
 const getById = async (id) => {
+    /*
+    BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'SELECT title, author_id FROM model_example.books WHERE id = ?';
     
     const [ booksData ] = await connection.execute(query, [id]);
@@ -34,6 +51,7 @@ const getById = async (id) => {
     };
     
     return book;
+    */
 }
 
 const create = async (title, authorId) => {
