@@ -6,6 +6,8 @@ const { error } = require('./middlewares');
 
 const app = express();
 
+app.use(express.json());
+
 app.use('/authors', authorRouter);
 
 // Receber uma query string com a chave author_id , e retornar apenas os livros associados.

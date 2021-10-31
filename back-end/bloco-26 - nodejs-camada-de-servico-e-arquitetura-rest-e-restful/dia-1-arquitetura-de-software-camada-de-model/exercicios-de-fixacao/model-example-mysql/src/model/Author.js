@@ -55,7 +55,14 @@ const getById = async (id) => {
     return author;
 }
 
+const create = async (firstName, middleName, lastName) => {
+    const query = 'INSERT INTO model_example.authors (first_name, middle_name, last_name) VALUES (?, ?, ?)';
+
+    await connection.execute(query, [firstName, middleName, lastName]);
+};
+
 module.exports = {
     getAll,
-    getById
+    getById,
+    create,
 };

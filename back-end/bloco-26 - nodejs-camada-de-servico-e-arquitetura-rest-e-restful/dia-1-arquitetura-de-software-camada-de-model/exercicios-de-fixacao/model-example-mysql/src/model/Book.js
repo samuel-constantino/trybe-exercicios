@@ -36,8 +36,14 @@ const getById = async (id) => {
     return book;
 }
 
+const create = async (title, authorId) => {
+    const query = 'INSERT INTO model_example.books (title, author_id) VALUES (?, ?)';
+    await connection.execute(query, [title, authorId]);
+};
+
 module.exports = {
     getById,
     getAll,
     getAllByAuthorId,
+    create,
 };

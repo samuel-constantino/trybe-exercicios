@@ -3,6 +3,7 @@ const express = require('express');
 const Book = require('../model/Book');
 
 const rescue = require('express-rescue');
+const isValidBook = require('../middlewares/isValidBook');
 
 const router = express.Router();
 
@@ -28,5 +29,16 @@ router.get('/:id', rescue(async (req, res, _next) => {
 
     return res.status(200).json(book);
 }));
+
+router.post('/',
+    rescue(isValidBook),
+    rescue(async (req, res, _next) => {
+        const { title, author_id } = req.body;
+        
+        await Book.create(title, author_id);
+
+        res.status(201).json({message: 'Livro criado com sucesso!'});
+    })
+);
 
 module.exports = router;
