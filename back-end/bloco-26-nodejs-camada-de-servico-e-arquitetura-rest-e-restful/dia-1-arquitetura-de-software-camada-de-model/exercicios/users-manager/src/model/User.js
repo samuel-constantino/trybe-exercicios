@@ -1,6 +1,20 @@
+// Começamos importando a conexão com o banco
 const connection = require('./connection');
 
 const { ObjectId } = require('mongodb');
+
+const formatUser = (document) => {
+    // Utilizamos o operador _rest_ (`...`) para guardar o resto das propriedades
+    const { _id, password, ...user } = document;
+
+    const formatedUser = {
+        id: _id,
+        // Utilizamos o operador _spread_ (`...`) para adicionar o resto das propriedades que tínhamos gravado em `user`
+        ...user,
+    };
+
+    return formatedUser;
+};
 
 const getById = async (id) => {
     try {
@@ -12,7 +26,7 @@ const getById = async (id) => {
     
         return user;
     } catch (error) {
-        return error.message
+        return error;
     }
 }
 
@@ -21,9 +35,9 @@ const getAll = async () => {
         const db = await connection();
         const users = await db.collection('users').find().toArray();
     
-        return users;
+        return users.map(formatUser);
     } catch (error) {
-        return error.message
+        return error;
     }
 }
 
@@ -41,7 +55,7 @@ const create = async (newUser) => {
             email
         };
     } catch (error) {
-        return error.message
+        return error;
     }
 };
 
@@ -56,10 +70,10 @@ const update = async (user) => {
             { "_id": ObjectId(id) },
             { 
                 $set: { 
-                    "firstName": firstName,
-                    "lastName": lastName,
-                    "email": email,
-                    "password": password
+                    firstName,
+                    lastName,
+                    email,
+                    password
                 } 
             }
         );
@@ -71,7 +85,7 @@ const update = async (user) => {
             email
         };
     } catch (error) {
-        return error.message
+        return error;
     }
 }
 
