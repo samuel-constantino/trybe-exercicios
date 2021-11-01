@@ -96,9 +96,22 @@ const getById = async (id) => {
 }
 
 const create = async (firstName, middleName, lastName) => {
+    /*
+    BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'INSERT INTO model_example.authors (first_name, middle_name, last_name) VALUES (?, ?, ?)';
 
     await connection.execute(query, [firstName, middleName, lastName]);
+    */
+
+    const db = await connection();
+    const newAuthor = await db.collection('authors').insertOne({firstName, middleName, lastName});
+
+    return setFullName({
+        id: newAuthor.insertedId,
+        firstName,
+        middleName,
+        lastName
+    });
 };
 
 module.exports = {

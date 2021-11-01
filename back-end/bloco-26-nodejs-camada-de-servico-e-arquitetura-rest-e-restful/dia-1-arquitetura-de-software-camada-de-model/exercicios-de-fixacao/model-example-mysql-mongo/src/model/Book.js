@@ -71,8 +71,16 @@ const getById = async (id) => {
 }
 
 const create = async (title, authorId) => {
+    /*
+    BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'INSERT INTO model_example.books (title, author_id) VALUES (?, ?)';
     await connection.execute(query, [title, authorId]);
+    */
+
+    const db = await connection();
+    const newBook = await db.collection('books').insertOne({title, authorId});
+
+    return newBook;
 };
 
 module.exports = {
