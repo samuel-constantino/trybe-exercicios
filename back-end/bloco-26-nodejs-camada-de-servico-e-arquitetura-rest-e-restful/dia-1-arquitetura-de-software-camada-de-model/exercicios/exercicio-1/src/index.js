@@ -2,17 +2,15 @@ const express = require('express');
 
 const rescue = require('express-rescue');
 
-const { userRouter } = require('./routes');
+const { error } = require('./middlewares');
 
-const { isUserValid, error } = require('./middlewares');
+const { userRouter } = require('./routes');
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/user', 
-    rescue(isUserValid),
-    rescue(userRouter)
+app.use('/user', rescue(userRouter)
 );
 
 app.use(error);
