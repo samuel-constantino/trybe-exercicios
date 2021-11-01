@@ -1,7 +1,5 @@
 const connection = require('./connection');
 
-const { ObjectId } = require('mongodb');
-
 const getAll = async() => {
     /*
     // BLOCO DE CÓDIGO USADO COM MYSQL
@@ -12,8 +10,10 @@ const getAll = async() => {
     return books;
     */
 
-    return connection()
-        .then((db) => db.collection('books').find().toArray())
+    const db = await connection();
+    const books = await db.collection('books').find().toArray();
+
+    return books;
 
 };
 
