@@ -1,5 +1,7 @@
 const connection = require('./connection');
 
+const { ObjectId } = require('mongodb');
+
 // adiciona uma string com o nome completo do autor
 const setFullName = (author) => {
     const { id, firstName, middleName, lastName } = author;
@@ -19,12 +21,15 @@ const setFullName = (author) => {
 }
 
 // Serializa os nomes, convertendo as chaves das propriedades de snake_case para camelCase
+/*
+FUNÇÃO USADA COM BANCO MYSQL
 const serialize = ({ id, first_name, middle_name, last_name }) => ({
     id,
     firstName: first_name,
     middleName: middle_name,
     lastName: last_name,
 });
+*/
 
 // Busca todos os autores do banco.
 const getAll = async () => {
@@ -38,22 +43,23 @@ const getAll = async () => {
     return authors.map(serialize).map(setFullName);
     */
 
-    return connection()
-        .then((db) => db.collection('authors').find().toArray())
-            .then((authors) => 
-                authors.map(({ _id, firstName, middleName, lastName }) => 
-                setFullName({
-                    id: _id,
-                    firstName,
-                    middleName,
-                    lastName
-                })
-                )
-            )
+    const db = await connection();
+    const authorsData = await db.collection('authors').find().toArray();
+
+    const authors = authorsData.map(({ _id, firstName, middleName, lastName }) => setFullName({
+        id: _id,
+        firstName,
+        middleName,
+        lastName
+    }));
+
+    return authors;
 };
 
 // Busca pelo id
 const getById = async (id) => {
+    /*
+    BLOCO DE CÓDIGO USADO COM MYSQL
     const query = 'SELECT id, first_name, middle_name, last_name FROM model_example.authors WHERE id = ?'
 
     const [ authors ] = await connection.execute(query, [id]);
@@ -70,6 +76,23 @@ const getById = async (id) => {
     });
 
     return author;
+    */
+
+    if (!ObjectId.isValid(id)) return null
+
+    const db = await connection();
+    const author = await db.collection('authors').findOne(new ObjectId(id));
+
+    if (!author) return null;
+
+    const { firstName, middleName, lastName } = author;
+
+    return setFullName({
+        id,
+        firstName,
+        middleName,
+        lastName
+    });
 }
 
 const create = async (firstName, middleName, lastName) => {

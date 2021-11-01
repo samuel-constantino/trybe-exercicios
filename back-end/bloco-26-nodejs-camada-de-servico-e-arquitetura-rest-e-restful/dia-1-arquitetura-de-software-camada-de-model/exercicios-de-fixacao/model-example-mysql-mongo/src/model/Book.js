@@ -1,5 +1,7 @@
 const connection = require('./connection');
 
+const { ObjectId } = require('mongodb');
+
 const getAll = async() => {
     /*
     // BLOCO DE CÓDIGO USADO COM MYSQL
@@ -30,8 +32,13 @@ const getAllByAuthorId = async (id) => {
     return booksAuthor;
     */
 
-    return connection()
-        .then((db) => db.collection('books').find({author_id: +id}).toArray())
+    // return connection()
+        // .then((db) => db.collection('books').find({author_id: +id}).toArray())
+
+    const db = await connection();
+    const books = await db.collection('books').find({author_id: +id}).toArray();
+
+    return books;
 };
 
 const getById = async (id) => {
@@ -52,6 +59,15 @@ const getById = async (id) => {
     
     return book;
     */
+
+    if (!ObjectId.isValid(id)) return null;
+
+    const db = await connection();
+    const book = await db.collection('books').findOne(new ObjectId(id));
+
+    if (!book) return null;
+
+    return book;
 }
 
 const create = async (title, authorId) => {
