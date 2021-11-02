@@ -1,6 +1,7 @@
 const express = require('express');
 
 const Author = require('./controllers/Author');
+const errorMiddeware = require('./middlewares/error');
 
 const app = express();
 
