@@ -2,11 +2,10 @@ const rescue = require('express-rescue');
 
 const cepModel = require('../models/cepModel');
 
-const cepDataFormated = (cepData) => {
+const cepDataFormat = (cepData) => {
     const { cep, logradouro, bairro, localidade, uf } = cepData;
 
     const formatedCep = `${cep.substr(0,5)}-${cep.substr(5, 7)}`;
-    console.log(formatedCep)
 
     return {
         cep: formatedCep,
@@ -22,7 +21,9 @@ const getCep = async (cep) => {
 
     if(!cepData.length) return { error: { "code": "notFound", "message": "CEP não encontrado" } }
 
-    return cepDataFormated(cepData[0]);
+    const cepDataFormated = cepDataFormat(cepData[0]);
+
+    return cepDataFormated;
 };
 
 module.exports = {
