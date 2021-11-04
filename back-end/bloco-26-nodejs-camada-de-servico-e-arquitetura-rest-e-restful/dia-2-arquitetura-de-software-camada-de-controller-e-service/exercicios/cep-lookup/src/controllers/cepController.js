@@ -1,13 +1,13 @@
-const cepService = require('../models/cepService');
+const cepService = require('../services/cepService');
 const rescue = require('express-rescue');
 
 const getCep = rescue(async (req, res, _next) => {
     const { cep } = req.params;
-    const cepData = cepService.getCep(cep);
+    const cepData = await cepService.getCep(cep);
 
-    if(cepData.error) return cepData.error;
+    if(cepData.error) return res.status(404).json(cepData.error);
 
-    res.status(200).json(cepData);
+    return res.status(200).json(cepData);
 })
 
 module.exports = {
