@@ -1,6 +1,6 @@
-const rescue = require('express-rescue');
-
 const cepModel = require('../models/cepModel');
+
+const cepDataValid = require('../schemas/isCepDataValid');
 
 const cepDataFormat = (cepData) => {
     const { cep, logradouro, bairro, localidade, uf } = cepData;
@@ -26,6 +26,21 @@ const getCep = async (cep) => {
     return cepDataFormated;
 };
 
+const createCep = async (cepData) => {
+    const { cep, logradoutro, bairro, localidade, uf } = cepData;
+
+    const cepData = await cepModel.getCep(cep);
+
+    if (cepData.length) return {
+        "error": { "code": "alreadyExists", "message": "CEP já existente" }
+    }
+    
+    const cepDataValided = cepDataValid(cepData);
+
+    if (cepDataValid.error) return cepDataValid;
+};
+
 module.exports = {
-    getCep
+    getCep,
+    createCep
 };

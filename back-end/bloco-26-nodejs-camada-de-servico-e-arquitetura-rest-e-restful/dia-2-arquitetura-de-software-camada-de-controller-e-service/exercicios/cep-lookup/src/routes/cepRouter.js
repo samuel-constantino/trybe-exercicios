@@ -2,7 +2,7 @@ const express = require('express');
 const rescue = require('express-rescue');
 
 const cepController = require('../controllers/cepController');
-const { isCepValid } = require('../middlewares');
+const { isCepValid, isCepDataValid } = require('../middlewares');
 
 const route = express.Router();
 
@@ -10,5 +10,7 @@ route.get('/:cep',
     rescue(isCepValid),
     cepController.getCep
 );
+
+route.post('/', cepController.createCep);
 
 module.exports = route;
