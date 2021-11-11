@@ -1,19 +1,21 @@
 const Joi = require('joi');
 
-const isCepDataValid = () => {
+const isCepDataValid = (cepData) => {
 
     const schema = Joi.object({
         cep: Joi.string().not().empty().required().pattern(new RegExp('^\d{5}-\d{3}$')),
-        logradouro:,
-        bairro:,
-        localidade:,
-        uf:,
+        logradouro: Joi.string().not().empty().required(),
+        bairro:Joi.string().not().empty().required(),
+        localidade:Joi.string().not().empty().required(),
+        uf: Joi.string().not().empty().max(2).required(),
     
     });
 
-    if (schema.error) {
-        return { error: { "code": "invalidData", "message": "<mensagem do Joi>" } };
-    }
+    const { error } = schema.validate(cepData);
+
+    if (error) return { code: 400, message: 'Dados do CEP inválidos' }
+
+    return '';
 };
 
 module.exports = isCepDataValid;

@@ -1,7 +1,7 @@
 const cepModel = require('../models/cepModel');
-const { cepValid } = require('../schemas');
+const { cepValid, isCepDataValid } = require('../schemas');
 
-// const cepDataValid = require('../schemas/isCepDataValid');
+const cepDataValid = require('../schemas/isCepDataValid');
 
 const cepDataFormat = (cepData) => {
     const { cep, logradouro, bairro, localidade, uf } = cepData;
@@ -38,21 +38,33 @@ const getCep = async (cep) => {
     };
 };
 
-// const createCep = async (cepData) => {
-//     const { cep, logradoutro, bairro, localidade, uf } = cepData;
+const createCep = async (cepData) => {
+    try {
+        const cepDataValided = isCepDataValid(cepData);
 
-//     const cepData = await cepModel.getCep(cep);
+        if (cepDataValided.code) return { code: cepDataValided.code, message: cepDataValided.message };
 
-//     if (cepData.length) return {
-//         "error": { "code": "alreadyExists", "message": "CEP já existente" }
-//     }
+        const { cep, logradoutro, bairro, localidade, uf } = cepData;
+
+
+    } catch ({ code, message }) {
+        return { code, message };
+    }
+
+
+
+    const cepData = await cepModel.getCep(cep);
+
+    if (cepData.length) return {
+        "error": { "code": "alreadyExists", "message": "CEP já existente" }
+    }
     
-//     const cepDataValided = cepDataValid(cepData);
+    const cepDataValided = cepDataValid(cepData);
 
-//     if (cepDataValid.error) return cepDataValid;
-// };
+    if (cepDataValid.error) return cepDataValid;
+};
 
 module.exports = {
     getCep,
-    // createCep
+    createCep
 };
