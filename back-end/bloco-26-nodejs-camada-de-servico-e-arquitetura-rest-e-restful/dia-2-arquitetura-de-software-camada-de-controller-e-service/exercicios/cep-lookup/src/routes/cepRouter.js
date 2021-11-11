@@ -7,7 +7,6 @@ const { isCepValid, isCepDataValid } = require('../middlewares');
 const route = express.Router();
 
 route.get('/:cep',
-    rescue(isCepValid),
     cepController.getCep
 );
 

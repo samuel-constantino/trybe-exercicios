@@ -1,6 +1,7 @@
 const cepModel = require('../models/cepModel');
+const { cepValid } = require('../schemas');
 
-const cepDataValid = require('../schemas/isCepDataValid');
+// const cepDataValid = require('../schemas/isCepDataValid');
 
 const cepDataFormat = (cepData) => {
     const { cep, logradouro, bairro, localidade, uf } = cepData;
@@ -17,30 +18,41 @@ const cepDataFormat = (cepData) => {
 };
 
 const getCep = async (cep) => {
-    const cepData = await cepModel.getCep(cep);
+    try {
 
-    if(!cepData.length) return { error: { "code": "notFound", "message": "CEP não encontrado" } }
+        const result = cepValid(cep);
 
-    const cepDataFormated = cepDataFormat(cepData[0]);
+        if (result.code) return { code: 400, message: result.message };
 
-    return cepDataFormated;
-};
+        const { cepValided } = result;
 
-const createCep = async (cepData) => {
-    const { cep, logradoutro, bairro, localidade, uf } = cepData;
-
-    const cepData = await cepModel.getCep(cep);
-
-    if (cepData.length) return {
-        "error": { "code": "alreadyExists", "message": "CEP já existente" }
-    }
+        const cepData = await cepModel.getCep(cepValided);
     
-    const cepDataValided = cepDataValid(cepData);
-
-    if (cepDataValid.error) return cepDataValid;
+        if(!cepData.length) return { code: 400, message: "CEP não encontrado" };
+    
+        const cepDataFormated = cepDataFormat(cepData[0]);
+    
+        return cepDataFormated;
+    }catch ({code, message}) {
+      return { code, message };  
+    };
 };
+
+// const createCep = async (cepData) => {
+//     const { cep, logradoutro, bairro, localidade, uf } = cepData;
+
+//     const cepData = await cepModel.getCep(cep);
+
+//     if (cepData.length) return {
+//         "error": { "code": "alreadyExists", "message": "CEP já existente" }
+//     }
+    
+//     const cepDataValided = cepDataValid(cepData);
+
+//     if (cepDataValid.error) return cepDataValid;
+// };
 
 module.exports = {
     getCep,
-    createCep
+    // createCep
 };

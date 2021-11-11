@@ -37,27 +37,27 @@ Bons estudos!
 
 8. Crie o endpoint GET /cep/:cep
 
-9. O endpoint deve receber, no parâmetro :cep , um número de CEP válido.
+9. O endpoint deve receber, no parâmetro :cep , um número de CEP válido:
 
-10. O CEP precisa conter 8 dígitos numéricos e pode ou não possui traço.
+O CEP precisa conter 8 dígitos numéricos e pode ou não possui traço.
 
 Dica Utilize o regex \d{5}-?\d{3} para validar o CEP.
 
-11. Caso o CEP seja inválido, retorne o status 400 Bad Request e o seguinte JSON:
+10. Caso o CEP seja inválido, retorne o status 400 Bad Request e o seguinte JSON:
 
 ```
   { "error": { "code": "invalidData", "message": "CEP inválido" } }
 ```
 
-12. Caso o CEP seja válido, realize uma busca no banco de dados.
+11. Caso o CEP seja válido, realize uma busca no banco de dados.
 
-13. Caso o CEP não exista no banco de dados, retorne o status 404 Not Found e o seguinte JSON:
+12. Caso o CEP não exista no banco de dados, retorne o status 404 Not Found e o seguinte JSON:
 
 ```
 { "error": { "code": "notFound", "message": "CEP não encontrado" } }
 ```
 
-14.  Caso o CEP exista, retorne o status `200 OK` e os dados do CEP no seguinte formato:
+13.  Caso o CEP exista, retorne o status `200 OK` e os dados do CEP no seguinte formato:
 
 ```
 {
@@ -69,9 +69,9 @@ Dica Utilize o regex \d{5}-?\d{3} para validar o CEP.
 }
 ```
 
-15. Crie o endpoint POST /cep
+14. Crie o endpoint POST /cep
 
-16. O endpoint deve receber a seguinte estrutura no corpo da requisição:
+15. O endpoint deve receber a seguinte estrutura no corpo da requisição:
 
 ```
 {
@@ -83,19 +83,19 @@ Dica Utilize o regex \d{5}-?\d{3} para validar o CEP.
 }
 ```
 
-17. Todos os campos são obrigatórios
+16. Todos os campos são obrigatórios
 
-18. Utilize o Joi para realizar a validação. Em caso de erro, retorne o status 400 Bad Request , com o seguinte JSON:
+17. Utilize o Joi para realizar a validação. Em caso de erro, retorne o status 400 Bad Request , com o seguinte JSON:
 
 ```
 { "error": { "code": "invalidData", "message": "<mensagem do Joi>" } }
 ```
 
-19. O CEP deve ser composto por 9 dígitos com traço.
+18. O CEP deve ser composto por 9 dígitos com traço.
 
 Dica : Utilize o seguinte regex para validar o CEP: \d{5}-\d{3}
 
-20. Se o CEP já existir, retorne o status 409 Conflict com o seguinte JSON:
+19. Se o CEP já existir, retorne o status 409 Conflict com o seguinte JSON:
 
 ```
 {
@@ -103,7 +103,7 @@ Dica : Utilize o seguinte regex para validar o CEP: \d{5}-\d{3}
 }
 ```
 
-21. Se o CEP ainda não existir, armazene-o no banco de dados e retorne o status 201 Created com os dados do novo CEP no seguinte formato:
+20. Se o CEP ainda não existir, armazene-o no banco de dados e retorne o status 201 Created com os dados do novo CEP no seguinte formato:
 
 ```
 {
