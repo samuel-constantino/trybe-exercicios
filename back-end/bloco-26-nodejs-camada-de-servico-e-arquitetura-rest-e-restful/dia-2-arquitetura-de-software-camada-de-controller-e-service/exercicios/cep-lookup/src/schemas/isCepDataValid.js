@@ -4,6 +4,10 @@ const isCepDataValid = () => {
 
     const schema = Joi.object({
         cep: Joi.string().not().empty().required().pattern(new RegExp('^\d{5}-\d{3}$')),
+        logradouro:,
+        bairro:,
+        localidade:,
+        uf:,
     
     });
 
