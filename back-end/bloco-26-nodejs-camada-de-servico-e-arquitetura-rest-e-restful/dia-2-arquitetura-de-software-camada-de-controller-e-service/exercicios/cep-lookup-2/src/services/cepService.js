@@ -1,18 +1,20 @@
 const { cepModel } = require('../services');
+const { isCepValid } = require('../schemas/validations');
+const { formatCep, formatCepData } = require('../schemas/transformations');
 
 const getCep = (cep) => {
     try {
-        // validação do cep
+        if (!isCepValid(cep)) return { code: 400, message: "CEP inválido" };
 
-        // retorno de erro, caso houver
+        const formatedCep = formatCep(cep);
 
-        // consulta ao model
+        const cepData = await cepModel.getCep(formatedCep);
 
-        // retorno de erro, caso houver
+        if (!cepData) return { code: 404, message: "CEP não encontrado" }
 
-        // formatação dos dados
+        const formatedCepData = formatCepData(cepData);
 
-        // retorna cep (objeto)
+        return formatedCepData;
     } catch ({ code, message }) {
         return { code, message }
     }
