@@ -114,3 +114,25 @@ Dica : Utilize o seguinte regex para validar o CEP: \d{5}-\d{3}
   "uf": "SP",
 }
 ```
+
+BONUS
+
+1. Utilize uma API externa para buscar CEPs que não existem no banco de dados
+
+Quando um CEP não existir no banco de dados, utilize a API https://viacep.com.br/ws/[numero-do-cep]/json/ para obter suas informações.
+
+2. Caso o CEP não exista na API externa, você receberá o JSON { "erro": true } . Nesse caso, retorne status 404 Not Found com o seguinte JSON:
+
+{ "error": { "code": "notFound", "message": "CEP não encontrado" } }
+
+3. Caso o CEP exista na API externa, armazene-o no banco e devolva seus dados no seguinte formato:
+
+{
+  "cep": "01001-000",
+  "logradouro": "Praça da Sé",
+  "bairro": "Sé",
+  "localidade": "São Paulo",
+  "uf": "SP",
+}
+
+Dica : Na arquitetura MSC, os models são responsáveis por toda a comunicação externa de uma aplicação, o que inclui APIs externas. Logo, você precisará de um model para acessar a API.

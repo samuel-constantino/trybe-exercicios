@@ -1,14 +1,9 @@
 const express = require('express');
-const rescue = require('express-rescue');
+const { cepController } = require('../controllers');
 
-const cepController = require('../controllers/cepController');
-const { isCepValid, isCepDataValid } = require('../middlewares');
+const route = express.Router({mergeParams: true});
 
-const route = express.Router();
-
-route.get('/:cep',
-    cepController.getCep
-);
+route.get('/:cep', cepController.getCep);
 
 route.post('/', cepController.createCep);
 
