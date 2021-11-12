@@ -10,10 +10,10 @@ const getCep = async (cep) => {
 
         const cepData = await cepModel.getCep(formatedCep);
 
-        if (!cepData) return { code: 404, message: "CEP não encontrado" }
+        if (cepData.code) return { code: 404, message: "CEP não encontrado" }
 
         const formatedCepData = formatCepData(cepData);
-
+        
         return formatedCepData;
     } catch ({ code, message }) {
         return { code, message }
@@ -27,14 +27,17 @@ const createCep = async (cepData) => {
         if (code) return { code, message };
 
         const formatedCep = formatCep(cepData.cep);
-
         // verificar se CEP já existe no banco
         const cepExists = await cepModel.getCep(formatedCep);
-        if (cepExists) return {code: 409, message: "CEP já existe"}
+        if (cepExists) throw {code: 409, message: "CEP já existe"}
 
         // insere novo CEP
         const result = await cepModel.createCep({...cepData, cep: formatedCep});
-
+        
+        if (result.code) {
+            const { code, message } = result;
+            throw { code, message };
+        }
         return formatCepData(result);
 
     }catch ({code, message}) {
