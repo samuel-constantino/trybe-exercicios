@@ -2,7 +2,7 @@ express = require('express');
 const { json } = require('body-parser');
 
 // const { cepRouter } = require('./routes');
-// const { error } = require('./middlewares');
+const { error } = require('./middlewares');
 
 require('dotenv').config();
 
@@ -16,7 +16,7 @@ app.get('/', (_req, res, _next) => {
 
 // app.use('/cep', cepRouter);
 
-// app.use(error);
+app.use(error);
 
 const PORT = process.env.PORT;
 
