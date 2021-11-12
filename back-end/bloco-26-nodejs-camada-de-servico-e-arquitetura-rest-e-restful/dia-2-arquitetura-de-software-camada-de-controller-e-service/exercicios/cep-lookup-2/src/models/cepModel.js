@@ -7,7 +7,7 @@ const getExternalCep = async (cep) => {
         const { data } = await axios(`https://viacep.com.br/ws/${cep}/json/`)
         
         if (data.erro) throw {code: 400, message: "CEP não encontrado"}
-        
+
         return data;
     } catch( {code, message}) {
         return {code, message};
@@ -22,12 +22,7 @@ const getCep = async (cep) => {
 
         if (!result.length) {
             const externalCep = await getExternalCep(cep);
-
-            if (externalCep.code) {
-                const {code, message} = externalCep;
-                throw {code, message};
-            }
-            return externalCep
+            return externalCep;
         }
 
         return result[0];

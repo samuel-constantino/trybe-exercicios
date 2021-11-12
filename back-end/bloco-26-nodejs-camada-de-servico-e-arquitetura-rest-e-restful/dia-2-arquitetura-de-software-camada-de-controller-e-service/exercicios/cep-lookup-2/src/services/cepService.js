@@ -9,7 +9,6 @@ const getCep = async (cep) => {
         const formatedCep = formatCep(cep);
 
         const cepData = await cepModel.getCep(formatedCep);
-
         if (cepData.code) return { code: 404, message: "CEP não encontrado" }
 
         const formatedCepData = formatCepData(cepData);
