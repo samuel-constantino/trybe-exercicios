@@ -1,5 +1,5 @@
 const { cepModel } = require('../models');
-const { isCepValid } = require('../schemas/validations');
+const { isCepValid, isCepDataValid } = require('../schemas/validations');
 const { formatCep, formatCepData } = require('../schemas/transformations');
 
 const getCep = async (cep) => {
@@ -12,7 +12,7 @@ const getCep = async (cep) => {
 
         if (!cepData) return { code: 404, message: "CEP não encontrado" }
 
-        const formatedCepData = formatCepData(cepData[0]);
+        const formatedCepData = formatCepData(cepData);
 
         return formatedCepData;
     } catch ({ code, message }) {
@@ -20,6 +20,29 @@ const getCep = async (cep) => {
     }
 };
 
+const createCep = async (cepData) => {
+    try {
+        // verifica se informações do cep são válidas
+        const { code, message } = isCepDataValid(cepData);
+        if (code) return { code, message };
+
+        const formatedCep = formatCep(cepData.cep);
+
+        // verificar se CEP já existe no banco
+        const cepExists = await cepModel.getCep(formatedCep);
+        if (cepExists) return {code: 409, message: "CEP já existe"}
+
+        // insere novo CEP
+        const result = await cepModel.createCep({...cepData, cep: formatedCep});
+
+        return formatCepData(result);
+
+    }catch ({code, message}) {
+        return {code, message};
+    }
+};
+
 module.exports = {
     getCep,
+    createCep,
 };
