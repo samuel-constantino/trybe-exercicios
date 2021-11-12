@@ -1,7 +1,7 @@
 express = require('express');
 const { json } = require('body-parser');
 
-// const { cepRouter } = require('./routes');
+const { cepRouter } = require('./routes');
 const { error } = require('./middlewares');
 
 require('dotenv').config();
@@ -11,10 +11,10 @@ const app = express();
 app.use(json());
 
 app.get('/', (_req, res, _next) => {
-    res.status(200).json({ "message": "pong!" });
+    return res.status(200).json({ "message": "pong!" });
 });
 
-// app.use('/cep', cepRouter);
+app.use('/cep', cepRouter);
 
 app.use(error);
 

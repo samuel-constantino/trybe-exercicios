@@ -5,6 +5,6 @@ const route = express.Router({mergeParams: true});
 
 route.get('/:cep', cepController.getCep);
 
-route.post('/:cep', cepController.creteCep);
+// route.post('/', cepController.creteCep);
 
 module.exports = route;

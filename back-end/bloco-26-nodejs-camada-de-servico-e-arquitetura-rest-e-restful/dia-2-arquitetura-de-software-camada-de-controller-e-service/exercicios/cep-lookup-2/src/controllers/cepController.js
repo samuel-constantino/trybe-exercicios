@@ -2,17 +2,17 @@ const rescue = require('express-rescue');
 
 const { cepService } = require('../services');
 
-const getCep = rescue(async (req, res, next) => {
+const getCep = rescue(async (req, res, _next) => {
     const { cep } = req.params;
     
     const result = await cepService.getCep(cep);
 
     if (result.code) {
         const { code, message } = result;
-        next({ code, message });
-    }
+        throw { code, message };
+    };
 
-    res.status(200).json(result);
+    return res.status(200).json(result);
 });
 
 module.exports = {
