@@ -26,6 +26,10 @@ class Board extends React.Component {
   handleClick(i) {
     const squares = this.state.squares.slice();
 
+    if (this.calculateWinner(squares) || squares[i]) {
+      return;
+    }
+
     const { xIsNext } = this.state
 
     squares[i] = xIsNext ? 'X' : 'O';
@@ -47,16 +51,23 @@ class Board extends React.Component {
   }
 
   render() {
-    const { xIsNext } = this.state;
+    const { squares, xIsNext } = this.state;
 
-    const player = xIsNext ? 'X' : 'O';
+    const winner = this.calculateWinner(squares);
+    let status;
+    
+    if (winner) {
+      status = `Vencedor: ${winner}`;
+    } else {
+      status = `Próximo Jogador ${xIsNext ? 'X' : 'O'}`;
+    }
 
     return (
       <div>
         <div
           className="status"
         >
-          {`Próximo Jogador: ${player}`}
+          {status}
         </div>
 
         <div className="board-row">
@@ -78,6 +89,32 @@ class Board extends React.Component {
         </div>
       </div>
     );
+  }
+
+  calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      // se o quadrado (a) já foi clicado
+      // e o próximo quadrado (b) for iqual ao anterior
+      // e o próximo também (c)
+      // retorne o vencedor
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+
+    return null;
   }
 }
 
