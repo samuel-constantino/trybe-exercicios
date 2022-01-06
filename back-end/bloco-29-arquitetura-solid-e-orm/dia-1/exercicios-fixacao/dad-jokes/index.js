@@ -4,6 +4,7 @@ para a API de dad jokes
 */
 
 const fetch = require('node-fetch');
+const axios = require('axios').default;
 
 const url = 'https://icanhazdadjoke.com';
 
@@ -18,12 +19,23 @@ const requestWithFetch = () => {
         .catch((e) => console.log(e));
 };
 
-const getJokes = (numberOfJokes) => {
-    for (let i = 0; i < numberOfJokes; i += 1){
-        requestWithFetch();
+const requestWithAxios = async () => {
+    try{
+        const response = await axios.get(url, {
+            headers: { Accept: 'text/plain' }
+        })
+        console.log(response.data);
+    }catch(e){
+        console.error(e);
     }
 };
 
-getJokes(1);
+const getJokes = (numberOfJokes, requester) => {
+    for (let i = 0; i < numberOfJokes; i += 1){
+        requester();
+    }
+};
+
+getJokes(1, requestWithAxios);
 
 module.exports = { getJokes };
