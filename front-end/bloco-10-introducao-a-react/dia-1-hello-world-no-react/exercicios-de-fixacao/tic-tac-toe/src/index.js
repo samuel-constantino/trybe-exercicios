@@ -50,6 +50,32 @@ class Board extends React.Component {
     );
   }
 
+  calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      // se o quadrado (a) já foi clicado
+      // e quadrado (a) iqual a quadrado (b)
+      // e quadrado (a) iqual a quadrado (c)
+      // retorne o vencedor
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+
+    return null;
+  }
+
   render() {
     const { squares, xIsNext } = this.state;
 
@@ -90,34 +116,7 @@ class Board extends React.Component {
       </div>
     );
   }
-
-  calculateWinner = (squares) => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      // se o quadrado (a) já foi clicado
-      // e o próximo quadrado (b) for iqual ao anterior
-      // e o próximo também (c)
-      // retorne o vencedor
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
-      }
-    }
-
-    return null;
-  }
 }
-
 class Game extends React.Component {
   render() {
     return (
