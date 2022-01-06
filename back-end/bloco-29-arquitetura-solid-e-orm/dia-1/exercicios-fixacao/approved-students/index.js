@@ -11,7 +11,17 @@ Além disso, as notas marcadas de 0% a 100%
 para os conceitos de A a F .
 */
 
-// Apoio para a função `getGradeLetter`, lembraremos disso mais a frente
+// Apoio para a função `setApproved`
+const SCHOOL_DATA = {
+    Standard: {
+        approvalGrade: 0.7,
+    },
+    Hogwarts: {
+        approvalGrade: 0.8,
+    },
+};
+
+// Apoio para a função `getGradeLetter`
 const GRADE_DICT = {
     0.9: 'A',
     0.8: 'B',
@@ -22,7 +32,6 @@ const GRADE_DICT = {
 
 const gradeKeys = Object.keys(GRADE_DICT);
 
-// função menor para remover o uso excessivo de if/else
 const getGradeLetter = (gradeNumber) => {
     let letterGrade = 'F';
 
@@ -36,7 +45,7 @@ const getGradeLetter = (gradeNumber) => {
     return letterGrade;
 };
 
-// Coletar notas
+// Coletar notas (letras)
 const getLetterGrades = ({ name, grade }) => ({
     name,
     grade,
@@ -44,28 +53,28 @@ const getLetterGrades = ({ name, grade }) => ({
 });
 
 // CONVERTER
-const percentageGradesIntoLetters = ({ name, disciplines }) => ({
-    name,
-    disciplines: disciplines.map(getLetterGrades),
-});
+const percentageGradesIntoLetters = ({ name, disciplines, school }) => ({
+        name,
+        disciplines: disciplines.map(getLetterGrades),
+        school,
+    });
 
 // DETERMINAR
-const approvedStudents = ({ disciplines }) => (
-    disciplines.every(({ grade }) => grade > 0.7)
-);
+const approvedStudents = (disciplines, { approvalGrade }) => disciplines
+    .every(({ grade }) => grade > approvalGrade);
 
 // ATUALIZAR
-const updateApprovalData = ({ name, disciplines }) => {
-    console.log(`A pessoa com nome ${name} foi aprovada!`);
+const updateApprovalData = ({ name: studentName, disciplines }) => {
+    console.log(`A pessoa com nome ${studentName} foi aprovada!`);
 
-    disciplines.map(({ name: studentName, letterGrade }) => (
-        console.log(`${studentName}: ${letterGrade}`)));
+    disciplines.map(({ name, letterGrade }) => (
+        console.log(`${name}: ${letterGrade}`)));
 };
 
 const setApproved = (students) => {
     students
         .map(percentageGradesIntoLetters)
-        .filter(approvedStudents)
+        .filter(({ disciplines, school }) => approvedStudents(disciplines, SCHOOL_DATA[school]))
         .map(updateApprovalData);
 };
 
@@ -75,9 +84,10 @@ const students = [
     {
         name: 'Lee',
         disciplines: [
-            { name: 'matemática', grade: 0.8 },
-            { name: 'história', grade: 0.6 },
+            { name: 'matemática', grade: 0.9 },
+            { name: 'história', grade: 0.8 },
         ],
+        school: 'Standard',
     },
     {
         name: 'Clementine',
@@ -85,6 +95,7 @@ const students = [
             { name: 'matemática', grade: 0.8 },
             { name: 'história', grade: 0.9 },
         ],
+        school: 'Hogwarts',
     },
 ];
 
