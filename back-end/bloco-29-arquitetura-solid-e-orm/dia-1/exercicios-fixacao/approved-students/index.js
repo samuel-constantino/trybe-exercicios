@@ -11,33 +11,40 @@ Além disso, as notas marcadas de 0% a 100%
 para os conceitos de A a F .
 */
 
+// Convertedor
+const percentageGradesIntoLetters = ({ name, disciplines }) => ({
+    name,
+    disciplines: disciplines.map(({ name, grade }) => {
+        let letterGrade;
+
+        if (grade >= 0.9) letterGrade = 'A';
+        else if (grade >= 0.8) letterGrade = 'B';
+        else if (grade >= 0.7) letterGrade = 'C';
+        else if (grade >= 0.6) letterGrade = 'D';
+        else if (grade >= 0.5) letterGrade = 'E';
+        else letterGrade = 'F';
+
+        return { name, grade, letterGrade };
+    }),
+});
+
+// Determinar
+const approvedStudents = ({ disciplines }) => (
+    disciplines.every(({ grade }) => grade > 0.7)
+);
+
+// Atualizar
+const updateApprovalData = ({ name, disciplines }) => {
+    console.log(`A pessoa com nome ${name} foi aprovada!`);
+
+    disciplines.map(({ name: studentName, letterGrade }) => console.log(`${studentName}: ${letterGrade}`));
+};
+
 const setApproved = (students) => {
-    const studentsWithLetterGrade = students.map((student) => {
-        const disciplinesWithLetterGrade = student.disciplines.map((discipline) => {
-            if (discipline.grade >= 0.9) discipline.letterGrade = 'A';
-            else if (discipline.grade >= 0.8) discipline.letterGrade = 'B';
-            else if (discipline.grade >= 0.7) discipline.letterGrade = 'C';
-            else if (discipline.grade >= 0.6) discipline.letterGrade = 'D';
-            else if (discipline.grade >= 0.1) discipline.letterGrade = 'E';
-            else discipline.letterGrade = 'F';
-
-            return discipline;
-        });
-
-        return {
-            name: student.name,
-            disciplines: disciplinesWithLetterGrade,
-        };
-    });
-
-    const approvedStudents = studentsWithLetterGrade.filter(({ disciplines }) => disciplines.every((discipline) => discipline.grade > 0.7));
-
-    // Finja que o console.log é algo que atualiza ma base de dados
-
-    approvedStudents.map(({ name, disciplines }) => {
-        console.log(`A pessoa com nome ${name} foi aprovada`);
-        disciplines.map(({ name, letterGrade }) => console.log(`${name}: ${letterGrade}`));
-    });
+    students
+        .map(percentageGradesIntoLetters)
+        .filter(approvedStudents)
+        .map(updateApprovalData);
 };
 
 // Abaixo temos um exemplo de execução
@@ -60,3 +67,10 @@ const students = [
 ];
 
 setApproved(students);
+
+module.exports = {
+    percentageGradesIntoLetters,
+    approvedStudents,
+    updateApprovalData,
+    setApproved,
+};
