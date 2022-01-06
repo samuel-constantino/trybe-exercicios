@@ -11,33 +11,55 @@ Além disso, as notas marcadas de 0% a 100%
 para os conceitos de A a F .
 */
 
-// Convertedor
-const percentageGradesIntoLetters = ({ name, disciplines }) => ({
+// Apoio para a função `getGradeLetter`, lembraremos disso mais a frente
+const GRADE_DICT = {
+    0.9: 'A',
+    0.8: 'B',
+    0.7: 'C',
+    0.6: 'D',
+    0.1: 'E',
+};
+
+const gradeKeys = Object.keys(GRADE_DICT);
+
+// função menor para remover o uso excessivo de if/else
+const getGradeLetter = (gradeNumber) => {
+    let letterGrade = 'F';
+
+    for (let i = 0; i < gradeKeys.length; i += 1) {
+        if (gradeNumber >= gradeKeys[i]) {
+            letterGrade = GRADE_DICT[gradeKeys[i]];
+            break;
+        }
+    }
+
+    return letterGrade;
+};
+
+// Coletar notas
+const getLetterGrades = ({ name, grade }) => ({
     name,
-    disciplines: disciplines.map(({ name, grade }) => {
-        let letterGrade;
-
-        if (grade >= 0.9) letterGrade = 'A';
-        else if (grade >= 0.8) letterGrade = 'B';
-        else if (grade >= 0.7) letterGrade = 'C';
-        else if (grade >= 0.6) letterGrade = 'D';
-        else if (grade >= 0.5) letterGrade = 'E';
-        else letterGrade = 'F';
-
-        return { name, grade, letterGrade };
-    }),
+    grade,
+    letterGrade: getGradeLetter(grade),
 });
 
-// Determinar
+// CONVERTER
+const percentageGradesIntoLetters = ({ name, disciplines }) => ({
+    name,
+    disciplines: disciplines.map(getLetterGrades),
+});
+
+// DETERMINAR
 const approvedStudents = ({ disciplines }) => (
     disciplines.every(({ grade }) => grade > 0.7)
 );
 
-// Atualizar
+// ATUALIZAR
 const updateApprovalData = ({ name, disciplines }) => {
     console.log(`A pessoa com nome ${name} foi aprovada!`);
 
-    disciplines.map(({ name: studentName, letterGrade }) => console.log(`${studentName}: ${letterGrade}`));
+    disciplines.map(({ name: studentName, letterGrade }) => (
+        console.log(`${studentName}: ${letterGrade}`)));
 };
 
 const setApproved = (students) => {
@@ -73,4 +95,5 @@ module.exports = {
     approvedStudents,
     updateApprovalData,
     setApproved,
+    getLetterGrades,
 };
