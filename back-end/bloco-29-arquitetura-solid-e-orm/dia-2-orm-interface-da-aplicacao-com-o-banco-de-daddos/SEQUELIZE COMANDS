@@ -49,4 +49,7 @@ SEQUELIZE COMANDS
 
 		npx sequelize db:seed:undo:all
 
-	
+
+- CHEAT SHEET
+
+	https://github.com/tryber/Trybe-CheatSheets/tree/master/backend/sequelize/setup
