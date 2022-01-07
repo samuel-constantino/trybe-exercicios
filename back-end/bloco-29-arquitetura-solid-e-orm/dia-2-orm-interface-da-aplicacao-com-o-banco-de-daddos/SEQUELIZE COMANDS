@@ -1,0 +1,55 @@
+SEQUELIZE COMANDS
+
+- INSTALAÇÂO E INICIALIZAÇÂO
+
+	- INSTALAR
+
+		npm init -y
+
+		npm i sequelize sequelize-cli mysql2
+
+	- INICIALIZAR
+
+		npx sequelize-cli init
+
+- MODELAÇÂO DO BANCO DE DADOS
+
+	- CRIAR BANCO DE DADOS
+
+		npx sequelize db:create
+
+
+	- CRIAR MODEL + MIGRATION
+
+		npx sequelize model:generate --name NomeDoModel --attributes nomeDoAtributo:tipo
+
+	- CRIAR MIGRATION
+
+		npx sequelize migration:generate --name nome-da-migration
+
+	- EXECUTAR MIGRATION
+
+		npx sequelize db:migrate
+
+	- REVERTER MIGRATION
+
+		npx sequelize db:migrate:undo
+
+- CRIAÇÂO DE SEEDERS
+
+	- CRIAR SEED
+
+		npx sequelize seed:generate --name users
+
+	- EXECUTAR SEED
+
+		npx sequelize db:seed:all
+
+	- REVERTER SEED
+
+		npx sequelize db:seed:undo:all
+
+
+- CHEAT SHEET
+
+	https://github.com/tryber/Trybe-CheatSheets/tree/master/backend/sequelize/setup
