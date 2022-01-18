@@ -5,6 +5,7 @@
   </head>
   <body>
     <button id='pingButton'>PING</button>
+    <ul id='messages'></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
@@ -14,6 +15,23 @@
         socket.emit('ping');
         return false;
       });
+
+      // cria uma 'li' e coloca dentro da 'ul'
+      const createMessage = (message) => {
+        const messagesUl = document.querySelector('#messages');
+        const li = document.createElement('li');
+
+        li.innerText = message;
+
+        messagesUl.appendChild(li);
+      };
+
+      // Quando nosso evento 'ola' for emitido, vamos pegar a string e adicionar na lista
+      socket.on('ola', (message) => createMessage(message));
+
+      // Quando o evento 'pong' for emitido pelo servidor, vamos pegar a mensagem recebida e adicionar na lista
+      socket.on('pong', (message) => createMessage(message));
+
     </script>
   </body>
 
