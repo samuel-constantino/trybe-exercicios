@@ -21,3 +21,7 @@ const createMessage = (message) => {
 };
 
 socket.on('serverMessage', (message) => createMessage(message));
+
+window.onbeforeunload = (event) => {
+    socket.disconnect();
+};
