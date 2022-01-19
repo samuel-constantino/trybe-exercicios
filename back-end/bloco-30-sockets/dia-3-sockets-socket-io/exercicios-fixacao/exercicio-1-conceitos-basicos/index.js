@@ -14,7 +14,7 @@ const io = require('socket.io')(http, {
 app.use(express.static(__dirname + '/public'));
 
 // require('./sockets/ping')(io);
-require('./sockets/chat')(io);
+// require('./sockets/chat')(io);
 require('./sockets/rooms')(io);
 
 app.get('/', (_req, res) => {
